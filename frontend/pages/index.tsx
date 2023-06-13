@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-hot-toast";
 
 const FileUploader = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -12,7 +13,7 @@ const FileUploader = () => {
 
   const handleFileUpload = async () => {
     try {
-      const response = await axios.post(
+      const { data } = await axios.post(
         "http://localhost:8800/api/users",
         { file: selectedFile },
         {
@@ -22,9 +23,9 @@ const FileUploader = () => {
         }
       );
 
-      console.log(response.data); // Process the response as needed
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.log(error);
+      toast.error("Something went wrong");
     }
   };
 

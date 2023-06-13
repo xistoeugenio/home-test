@@ -9,7 +9,11 @@ interface userType {
   favorite_sport: string
 }
 
-export const csvToJson = async (csvFile: Express.Multer.File, response: Response) => {
+export const csvToJson = async (
+  csvFile: Express.Multer.File,
+  response: Response) => {
+
+
   const { buffer } = csvFile;
   const readableFile = new Readable()
   readableFile.push(buffer)
@@ -26,8 +30,8 @@ export const csvToJson = async (csvFile: Express.Multer.File, response: Response
       const productLineSplit = line.split(",");
 
 
-      if (productLineSplit.length !== 4){
-        return response.json({message: 'please your file should include fields name,city,country,favorite_sport'})
+      if (productLineSplit.length !== 4) {
+        return response.status(422).json('please your file should include fields name, city, country, favorite_sport')
       }
 
 
