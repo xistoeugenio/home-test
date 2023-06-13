@@ -1,0 +1,28 @@
+.homeContainer {
+  background: #020202;
+  width: 960px;
+  max-width: 96vw;
+  height: 90vh;
+  border: 1.5px solid gray;
+  padding: 0px 20px;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+}
+
+.listCardsContainer {
+  background-color: #0d0d0d;
+  flex: 1;
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.listCardsContainer::-webkit-scrollbar {
+  display: none;
+}

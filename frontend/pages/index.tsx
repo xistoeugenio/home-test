@@ -1,38 +1,29 @@
 import React, { ChangeEvent, useState } from "react";
-import axios, { AxiosError } from "axios";
-import { toast } from "react-hot-toast";
+import styles from "../styles/home.module.css";
+import Navbar from "@/components/Navbar";
+import Card from "@/components/Card";
+import UploadButton from "@/components/UploadButton";
+import useUsers from "@/hooks/useUsers";
+import { User } from "../types/user";
 
 const FileUploader = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files !== null) {
-      setSelectedFile(event.target.files[0]);
-    }
-  };
-
-  const handleFileUpload = async () => {
-    try {
-      const { data } = await axios.post(
-        "http://localhost:8800/api/users",
-        { file: selectedFile },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    }
-  };
+  const [query, setQuery] = useState("");
+  const { data: users = [], isLoading, mutate } = useUsers(query);
 
   return (
-    <div className="text-white">
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleFileUpload}>Upload File</button>
+    <div className="bg-neutral-800 h-screen flex items-center justify-center">
+      <div className={styles.homeContainer}>
+        <Navbar setQuery={setQuery} />
+        <div className={styles.listCardsContainer}>
+          {!isLoading &&
+            users?.map((user: User, index: any) => (
+              <Card key={index} userInfo={user} />
+            ))}
+        </div>
+        <div className="h-16">
+          <UploadButton query={query}/>
+        </div>
+      </div>
     </div>
   );
 };
