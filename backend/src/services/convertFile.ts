@@ -1,4 +1,3 @@
-import { Response } from "express";
 import { Readable } from "stream"
 import readline from "readline"
 
@@ -9,9 +8,7 @@ interface userType {
   favorite_sport: string
 }
 
-export const csvToJson = async (
-  csvFile: Express.Multer.File,
-  response: Response) => {
+export const csvToJson = async (csvFile: Express.Multer.File) => {
 
 
   const { buffer } = csvFile;
@@ -30,10 +27,10 @@ export const csvToJson = async (
       const productLineSplit = line.split(",");
 
 
+      //this verify if the file provided have the same user fields
       if (productLineSplit.length !== 4) {
-        return response.status(422).json('please your file should include fields name, city, country, favorite_sport')
+        return false
       }
-
 
       products.push({
         name: productLineSplit[0],
@@ -44,5 +41,5 @@ export const csvToJson = async (
     }
   }
 
-  return response.json(products);
+  return products as userType[];
 }

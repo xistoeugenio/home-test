@@ -1,11 +1,9 @@
 import express from "express"
-import multer, { Multer } from "multer";
-import { getUsers } from "../controllers/userController";
+import { getAll } from "../controllers/userController";
 
-const multerConfig: Multer = multer();
 const router = express.Router();
 
-//GET ALL
-router.post("/", multerConfig.single("file"), getUsers)
+//GET ALL USERS
+router.get('/', getAll)
 
 export default router;

@@ -1,17 +1,27 @@
 import { Request, Response } from "express";
-import { csvToJson } from "../services/convertFile";
+import User from "../models/User";
 
 
-export const getUsers = async (request: Request, response: Response) => {
-  const { file } = request;
-  if (!file) {
-    return response.status(400).json('Please select a file')
-  }
+//GET All USERS
 
-  if (file.mimetype === 'text/csv') {
-    csvToJson(file, response)
+export const getAll = async (request: Request, response: Response) => {
+  const { q } = request.query;
+
+  if (q) {
+    const searchQuery = {
+      $or: [
+        { name: { $regex: q, $options: 'i' } },
+        { city: { $regex: q, $options: 'i' } },
+        { country: { $regex: q, $options: 'i' } },
+        { favorite_sport: { $regex: q, $options: 'i' } },
+      ],
+    };
+
+    const users = await User.find(searchQuery);
+
+    return response.status(200).json(users);
   } else {
-    return response.status(422).json('This file should be in CSV format')
+    const users = await User.find();
+    return response.status(200).json(users);
   }
-
 };
