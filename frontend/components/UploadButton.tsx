@@ -1,7 +1,7 @@
-import useUsers from "@/hooks/useUsers";
-import axios from "axios";
 import React, { ChangeEvent, LabelHTMLAttributes } from "react";
 import { toast } from "react-hot-toast";
+import useUsers from "@/hooks/useUsers";
+import axios from "axios";
 import styles from "../styles/home.module.css";
 
 interface UploadButtonProps extends LabelHTMLAttributes<HTMLLabelElement> {
@@ -11,6 +11,7 @@ interface UploadButtonProps extends LabelHTMLAttributes<HTMLLabelElement> {
 const UploadButton: React.FC<UploadButtonProps> = ({ query, ...props }) => {
   const { mutate } = useUsers(query);
 
+  // Handle file upload to the server
   const handleFileUpload = async (file: File) => {
     try {
       await axios.post(
@@ -22,20 +23,21 @@ const UploadButton: React.FC<UploadButtonProps> = ({ query, ...props }) => {
           },
         }
       );
-      toast.success("upload successfully");
+      toast.success("Upload successful");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong, verify your file and try again");
     }
   };
 
+  // Handle file change event
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null) {
       return null;
     }
 
     if (event.target.files[0]?.type !== "text/csv") {
-      toast.error("This file must be in a CSV format");
+      toast.error("This file must be in CSV format");
     } else {
       await handleFileUpload(event.target.files[0]);
     }
@@ -55,4 +57,5 @@ const UploadButton: React.FC<UploadButtonProps> = ({ query, ...props }) => {
     </label>
   );
 };
+
 export default UploadButton;

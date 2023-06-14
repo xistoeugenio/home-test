@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { ClipLoader } from "react-spinners";
 import styles from "../styles/home.module.css";
+import { User } from "../types/user";
+import useUsers from "@/hooks/useUsers";
+
+//components
 import Navbar from "@/components/Navbar";
 import Card from "@/components/Card";
 import UploadButton from "@/components/UploadButton";
-import useUsers from "@/hooks/useUsers";
-import { User } from "../types/user";
 import InitialMessage from "@/components/InitialMessage";
-import { ClipLoader } from "react-spinners";
+
 
 const FileUploader = () => {
   const [query, setQuery] = useState("");
@@ -15,30 +18,32 @@ const FileUploader = () => {
   return (
     <div className="bg-neutral-800 h-screen flex items-center justify-center">
       <div className={styles.homeContainer}>
+        {/* Navbar */}
         <Navbar setQuery={setQuery} query={query} />
         <div className={styles.listCardsContainer}>
-
-          {/*This verifies if it's loading, if users's array is empty
-             or if 'query' has a valid value*/}
-
+          {/* Loading state */}
           {isLoading ? (
             <div className="flex items-center">
               <ClipLoader color="#0f87ff" size={70} />
             </div>
           ) : users.length > 0 ? (
+            // Displaying user cards
             users?.map((user: User, index: any) => (
               <Card key={index} userInfo={user} />
             ))
           ) : query.length > 0 ? (
+            // No results found
             <div className="text-white text-lg font-semibold">
               No results found for your search. Please try again.
             </div>
           ) : (
+            // Initial message
             <InitialMessage />
           )}
         </div>
         <div className="h-16 flex items-center justify-center">
-          <UploadButton query={query} className="sm:hidden block " />
+          {/* Upload button */}
+          <UploadButton query={query} className="sm:hidden block" />
         </div>
       </div>
     </div>
