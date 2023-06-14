@@ -1,26 +1,25 @@
 import { ChangeEvent } from "react";
 import { BiSearch } from "react-icons/bi";
-import { mutate } from "swr";
+import UploadButton from "./UploadButton";
 
 interface NavbarProps {
   setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string;
 }
-const Navbar: React.FC<NavbarProps> = ({ setQuery }) => {
-
+const Navbar: React.FC<NavbarProps> = ({ setQuery, query }) => {
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
     console.log("dsbfjasfksahfask");
   };
 
-  
   return (
-    <div className=" h-16 flex items-center justify-between">
-      <div onClick={()=>{mutate}}>Sample.csv</div>
-      <div className="bg-neutral-400 h-9 w-2/4 flex items-center gap-2 p-2 rounded-md">
+    <div className=" h-16 flex items-center justify-between ">
+      <UploadButton query={query} className="sm:block hidden " />
+      <div className="bg-neutral-400 h-9 flex-1 max-w-none sm:max-w-[60%] flex items-center gap-2 p-2 rounded-md">
         <input
           onChange={handleQueryChange}
           type="text"
-          className="bg-transparent outline-none flex-1 text-lg"
+          className="bg-transparent outline-none flex-1 sm:text-xl text-lg "
         />
         <BiSearch className="w-5 h-5" />
       </div>

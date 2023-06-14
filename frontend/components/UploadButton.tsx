@@ -1,13 +1,14 @@
 import useUsers from "@/hooks/useUsers";
 import axios from "axios";
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, LabelHTMLAttributes } from "react";
 import { toast } from "react-hot-toast";
+import styles from "../styles/home.module.css";
 
-interface UploadButtonProps {
+interface UploadButtonProps extends LabelHTMLAttributes<HTMLLabelElement> {
   query: string;
 }
 
-const UploadButton: React.FC<UploadButtonProps> = ({ query }) => {
+const UploadButton: React.FC<UploadButtonProps> = ({ query, ...props }) => {
   const { mutate } = useUsers(query);
 
   const handleFileUpload = async (file: File) => {
@@ -29,28 +30,29 @@ const UploadButton: React.FC<UploadButtonProps> = ({ query }) => {
   };
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    
     if (event.target.files === null) {
       return null;
     }
 
     if (event.target.files[0]?.type !== "text/csv") {
       toast.error("This file must be in a CSV format");
+    } else {
+      await handleFileUpload(event.target.files[0]);
     }
 
-    await handleFileUpload(event.target.files[0]);
-
-    setTimeout(mutate, 1000);
+    setTimeout(mutate, 2000);
     event.target.value = "";
   };
 
   return (
-    <div>
-      <label className="bg-white">
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit">Upload</button>
-      </label>
-    </div>
+    <label {...props}>
+      <input
+        type="file"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+      <span className={styles.UploadButton}>Upload CSV</span>
+    </label>
   );
 };
 export default UploadButton;
