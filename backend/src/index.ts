@@ -24,7 +24,7 @@ mongoose.connection.on("disconnected", () => {
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
   })
 );
